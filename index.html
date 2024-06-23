@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Search</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">Product Search</h1>
+        <div class="input-group mb-3">
+            <input type="text" id="search-input" class="form-control" placeholder="Search for products...">
+            <div class="input-group-append">
+                <button id="search-button" class="btn btn-primary">Search</button>
+            </div>
+        </div>
+
+        <div class="filters mb-3">
+            <h5>Category</h5>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="shirts" id="categoryShirts">
+                <label class="form-check-label" for="categoryShirts">Shirts</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="tops" id="categoryTops">
+                <label class="form-check-label" for="categoryTops">Tops</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="shoes" id="categoryShoes">
+                <label class="form-check-label" for="categoryShoes">Shoes</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="t-shirts" id="categoryTshirts">
+                <label class="form-check-label" for="categoryTshirts">T-Shirts</label>
+            </div>
+
+            <h5>Shop Name</h5>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="6thstreet" id="shop6thstreet">
+                <label class="form-check-label" for="shop6thstreet">6thstreet</label>
+            </div>
+        </div>
+
+        <div id="results" class="row"></div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
