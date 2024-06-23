@@ -18,7 +18,7 @@ function fetchSearchResults(searchText) {
     };
 
 
-    fetch(`http://mori-backend.mori-ai.svc/search/?text=${searchText}`, {
+    fetch(`https://mori.darkube.app/search/?text=${searchText}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
