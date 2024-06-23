@@ -1,8 +1,11 @@
 const searchInput = document.getElementById('search-input');
+const searchButton = document.getElementById('search-button');
 const resultsContainer = document.getElementById('results');
 
 // Function to fetch search results
-function fetchSearchResults(searchText) {
+function fetchSearchResults() {
+    const searchText = searchInput.value.trim();
+
     const categories = [];
     const shops = [];
 
@@ -17,7 +20,6 @@ function fetchSearchResults(searchText) {
         shop_name: shops.length > 0 ? shops.join(",") : null
     };
 
-
     fetch(`https://mori.darkube.app/search/?text=${searchText}`, {
         method: 'POST',
         headers: {
@@ -27,7 +29,7 @@ function fetchSearchResults(searchText) {
     })
     .then(response => response.json())
     .then(data => {
-        displayResults(data.results.result);  // Adjusted to match the new response structure
+        displayResults(data.results.result);
     })
     .catch(error => {
         console.error('Error:', error);
@@ -40,77 +42,28 @@ function displayResults(results) {
 
     results.forEach(result => {
         const product = result.payload;
+        const productElement = document.createElement('div');
+        productElement.className = 'col-sm-6 col-md-4 col-lg-3 mb-4';
 
-        // Create card element
-        const card = document.createElement('div');
-        card.className = 'card mb-3';
-        card.style = 'width: 18rem;';
+        productElement.innerHTML = `
+            <div class="card" style="width: 18rem;">
+                <img src="${product.images[0]}" class="card-img-top" alt="${product.name}">
+                <div class="card-body">
+                    <h5 class="card-title">${product.name}</h5>
+                    <p class="card-text">${product.description}</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">${product.currency} ${product.current_price}</li>
+                </ul>
+                <div class="card-body">
+                    <a href="${product.link}" target="_blank" class="card-link">View Product</a>
+                </div>
+            </div>
+        `;
 
-        // Card image
-        const img = document.createElement('img');
-        img.src = product.images[0];
-        img.className = 'card-img-top';
-        img.alt = product.name;
-        card.appendChild(img);
-
-        // Card body
-        const cardBody = document.createElement('div');
-        cardBody.className = 'card-body';
-
-        const title = document.createElement('h5');
-        title.className = 'card-title';
-        title.textContent = product.name;
-        cardBody.appendChild(title);
-
-        const description = document.createElement('p');
-        description.className = 'card-text';
-        description.textContent = product.description;
-        cardBody.appendChild(description);
-
-        // List group for details
-        const listGroup = document.createElement('ul');
-        listGroup.className = 'list-group list-group-flush';
-
-        const priceItem = document.createElement('li');
-        priceItem.className = 'list-group-item';
-        priceItem.textContent = `Price: ${product.currency} ${product.current_price}`;
-        listGroup.appendChild(priceItem);
-
-        const oldPriceItem = document.createElement('li');
-        oldPriceItem.className = 'list-group-item';
-        oldPriceItem.textContent = `Old Price: ${product.currency} ${product.old_price} (${product.off_percent}% off)`;
-        listGroup.appendChild(oldPriceItem);
-
-        // Link
-        const linkDiv = document.createElement('div');
-        linkDiv.className = 'card-body';
-
-        const link = document.createElement('a');
-        link.href = product.link;
-        link.className = 'card-link';
-        link.textContent = 'View Product';
-        link.target = '_blank';
-        linkDiv.appendChild(link);
-
-        card.appendChild(cardBody);
-        card.appendChild(listGroup);
-        card.appendChild(linkDiv);
-
-        resultsContainer.appendChild(card);
+        resultsContainer.appendChild(productElement);
     });
 }
 
-// Event listener for live search on keyup event
-searchInput.addEventListener('keyup', function() {
-    const searchText = searchInput.value.trim();
-    fetchSearchResults(searchText);
-});
-
-// Event listeners for checkbox changes
-document.querySelectorAll('.form-check-input').forEach(checkbox => {
-    checkbox.addEventListener('change', function() {
-        const searchText = searchInput.value.trim();
-        fetchSearchResults(searchText);
-    });
-});
-
+// Event listener for search button click event
+searchButton.addEventListener('click', fetchSearchResults);
