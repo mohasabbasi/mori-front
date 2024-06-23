@@ -17,7 +17,9 @@ function fetchSearchResults(searchText) {
         shop_name: shops.length > 0 ? shops.join(",") : null
     };
 
+
     fetch(`http://mori-backend.mori-ai.svc/search/?text=${searchText}`, {
+
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -112,3 +114,4 @@ document.querySelectorAll('.form-check-input').forEach(checkbox => {
         fetchSearchResults(searchText);
     });
 });
+
