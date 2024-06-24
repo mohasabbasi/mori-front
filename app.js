@@ -1,11 +1,10 @@
 const searchInput = document.getElementById('search-input');
 const searchButton = document.getElementById('search-button');
 const resultsContainer = document.getElementById('results');
+const loadingElement = document.getElementById('loading');
 
 // Function to fetch search results
-function fetchSearchResults() {
-    const searchText = searchInput.value.trim();
-
+function fetchSearchResults(searchText) {
     const categories = [];
     const shops = [];
 
@@ -20,6 +19,9 @@ function fetchSearchResults() {
         shop_name: shops.length > 0 ? shops.join(",") : null
     };
 
+    // Show loading animation
+    loadingElement.style.display = 'block';
+
     fetch(`https://mori.darkube.app/search/?text=${searchText}`, {
         method: 'POST',
         headers: {
@@ -33,6 +35,10 @@ function fetchSearchResults() {
     })
     .catch(error => {
         console.error('Error:', error);
+    })
+    .finally(() => {
+        // Hide loading animation
+        loadingElement.style.display = 'none';
     });
 }
 
@@ -54,6 +60,8 @@ function displayResults(results) {
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">${product.currency} ${product.current_price}</li>
+                    <li class="list-group-item">Brand: ${product.brand_name}</li>
+                    <li class="list-group-item">Category: ${product.category_name}</li>
                 </ul>
                 <div class="card-body">
                     <a href="${product.link}" target="_blank" class="card-link">View Product</a>
@@ -65,5 +73,26 @@ function displayResults(results) {
     });
 }
 
-// Event listener for search button click event
-searchButton.addEventListener('click', fetchSearchResults);
+// Function to handle search
+function handleSearch() {
+    const searchText = searchInput.value.trim();
+    fetchSearchResults(searchText);
+}
+
+// Event listener for search button click
+searchButton.addEventListener('click', handleSearch);
+
+// Event listener for pressing Enter in the search input
+searchInput.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+        handleSearch();
+    }
+});
+
+// Event listeners for checkbox changes
+document.querySelectorAll('.form-check-input').forEach(checkbox => {
+    checkbox.addEventListener('change', function() {
+        const searchText = searchInput.value.trim();
+        fetchSearchResults(searchText);
+    });
+});
